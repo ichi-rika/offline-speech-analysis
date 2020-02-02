@@ -9,14 +9,14 @@ class PlotAxis;
 class PlotSeries
 {
 public:
-    PlotSeries(bool scatter = false);
+    PlotSeries(const QColor &color);
 
     void append(double x, double y);
 
-    void render(PlotAxis *xAxis, PlotAxis *yAxis, QPainter &painter) const;
+    void render(int marginLeft, int marginBottom, PlotAxis *xAxis, PlotAxis *yAxis, QPainter &painter) const;
 
 private:
-    bool m_scatter;
+    QColor m_color;
     int m_nElt;
     QVector<double> m_xs, m_ys;
 };

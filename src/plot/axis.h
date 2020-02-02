@@ -5,10 +5,15 @@
 
 #include "plot/transform.h"
 
+enum AxisOrientation
+{
+    Horizontal, Vertical
+};
+
 class PlotAxis
 {
 public:
-    PlotAxis();
+    PlotAxis(AxisOrientation orientation);
 
     double min() const;
     double max() const;
@@ -19,21 +24,29 @@ public:
     QString title() const;
     void setTitle(const QString &title);
 
+    double tickSpacing() const;
+    int minorTickCount() const;
+    void setTickSpacing(double spacing);
+    void setMinorTickCount(int minorCount);
+
     void setDataType(DataTransform type);
     void setAxisType(AxisTransform type);
     void setTypes(DataTransform dataType, AxisTransform axisType);
 
-    void render(QPainter &painter) const;
+    int width(QPainter &painter) const;
+    void render(int margin, QPainter &painter) const;
     
     // Between data domain and axis domain
     int realToPlot(int length, double xr) const;
     double plotToReal(int length, int xp) const;
 
 protected:
-
+    AxisOrientation m_orientation;
     double m_min;
     double m_max;
     QString m_title;
+    double m_tickSpacing;
+    int m_minorTickCount;
 
     // Between data domain and [0,1]
     PlotTransform *m_dataTrans;

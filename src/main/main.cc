@@ -41,18 +41,18 @@ int main(int argc, char **argv)
     
     Reaper::track(x, fs, pitch, voicing);
 
-    ArrayXd x_res = Resample::resample(x, fs, 9000);
-    std::vector<DblTrack> frmTracks = Formant::track(x_res, 9000, 10, 50.0, 5.0, 100.0);
+    ArrayXd x_res = Resample::resample(x, fs, 10000, 50);
+    std::vector<DblTrack> frmTracks = Formant::track(x_res, 10000, 10, 35.0, 1.0, 100.0);
 
     QApplication app(argc, argv);
 
     Style::init(app);
 
     MainWindow w;
-    w.trackView->addTrack(pitch);
+    w.trackView->addTrack(pitch, Qt::cyan);
 
     for (const auto &track : frmTracks) {
-        w.trackView->addTrack(track, true);
+        w.trackView->addTrack(track, "orange");
     }
 
     w.trackView->setFrequencyRange(0, 4000);

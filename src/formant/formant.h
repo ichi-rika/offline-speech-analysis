@@ -50,6 +50,9 @@ namespace Formant
                 else if (i == 0 && f2 > 1800) {
                     peakMergers.push_back(std::move(roots[i]));
                 }
+                else {
+                    finalRoots.push_back(std::move(roots[i]));
+                }
             }
             else {
                 finalRoots.push_back(std::move(roots[i]));

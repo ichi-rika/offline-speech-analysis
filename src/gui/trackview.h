@@ -11,7 +11,7 @@ public:
     TrackView(QWidget *parent = nullptr);
     ~TrackView();
 
-    void addTrack(const DblTrack &track, bool scatter = false);
+    void addTrack(const DblTrack &track, const QColor &color);
     void removeAllTracks();
     
     void setFrequencyRange(double min, double max);

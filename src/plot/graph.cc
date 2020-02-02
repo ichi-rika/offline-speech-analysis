@@ -3,10 +3,17 @@
 #include "plot/axis.h"
 
 PlotGraph::PlotGraph(QWidget *parent)
-    : QWidget(parent), m_xAxis(new PlotAxis), m_yAxis(new PlotAxis)
+    : QWidget(parent), m_xAxis(new PlotAxis(Horizontal)), m_yAxis(new PlotAxis(Vertical))
 {
+    m_xAxis->setTitle("Time (s)");
+    m_xAxis->setTickSpacing(1.0);
+    m_xAxis->setMinorTickCount(10);
+    m_xAxis->setDataType(Linear);
+
+    m_yAxis->setTitle("Frequency (Hz)");
+    m_yAxis->setTickSpacing(1000.0);
+    m_yAxis->setMinorTickCount(10);
     m_yAxis->setDataType(Mel);
-    m_yAxis->setAxisType(Reverse);
 }
 
 PlotGraph::~PlotGraph()
@@ -42,10 +49,13 @@ void PlotGraph::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    m_xAxis->render(painter);
-    m_yAxis->render(painter);
+    int marginLeft = m_yAxis->width(painter);
+    int marginBottom = m_xAxis->width(painter);
 
     for (PlotSeries *series : m_seriesList) {
-        series->render(m_xAxis, m_yAxis, painter);
+        series->render(marginLeft, marginBottom, m_xAxis, m_yAxis, painter);
     }
+    
+    m_xAxis->render(marginLeft, painter);
+    m_yAxis->render(marginBottom, painter);
 }

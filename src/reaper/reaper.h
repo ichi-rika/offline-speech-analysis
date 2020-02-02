@@ -52,7 +52,7 @@ namespace Reaper {
 
         for (int i = 0; i < f0->num_frames(); ++i) {
             const double t = f0->t(i);
-            pitch[t] = f0->v(i) ? f0->a(i) : 0.0;
+            pitch[t] = f0->v(i) ? f0->a(i) : -0.0;
         }
 
         for (int i = 0; i < pm->num_frames(); ++i) {
