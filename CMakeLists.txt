@@ -67,9 +67,11 @@ set(SOURCES
     src/audio/audio.h
     src/audio/decode_file.c
     src/formant/formant.h
+    src/formant/track.cc
     src/formant/lpc.h
     src/formant/roots.h
     src/formant/bairstow.h
+    src/formant/bairstow.cc
     src/formant/cauchy.h
     src/formant/resample.h
     src/formant/viterbi.h

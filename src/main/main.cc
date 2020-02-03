@@ -41,8 +41,30 @@ int main(int argc, char **argv)
     
     Reaper::track(x, fs, pitch, voicing);
 
-    ArrayXd x_res = Resample::resample(x, fs, 10000, 50);
-    std::vector<DblTrack> frmTracks = Formant::track(x_res, 10000, 10, 35.0, 1.0, 100.0);
+    ArrayXd x_res = Resample::resample(x, fs, 12000, 50);
+    
+    std::vector<std::vector<Formant::frm_root>> rawFormants = Formant::analyse(
+            x_res, 12000,
+            10,
+            25.0, 0.5,
+            500.0
+    );
+
+    std::vector<DblTrack> formantTracks = Formant::track(
+            rawFormants,
+            25.0, 0.5,
+            5,
+            550,
+            1650,
+            2750,
+            3850,
+            4950,
+            1.0,
+            0.8,
+            1.5
+    );
+
+    //std::vector<DblTrack> formantTracks = Formant::analyseTracks(x_res, 12000, 12, 25.0, 0.5, 500.0);
 
     QApplication app(argc, argv);
 
@@ -51,11 +73,20 @@ int main(int argc, char **argv)
     MainWindow w;
     w.trackView->addTrack(pitch, Qt::cyan);
 
-    for (const auto &track : frmTracks) {
-        w.trackView->addTrack(track, "orange");
+    QColor trackColors[] = {
+        "orange",
+        "pink",
+        "green",
+        "lightblue",
+        "yellow",
+    };
+    int itrack = 0;
+    for (const auto &track : formantTracks) {
+        w.trackView->addTrack(track, trackColors[itrack], true);
+        itrack++;
     }
 
-    w.trackView->setFrequencyRange(0, 4000);
+    w.trackView->setFrequencyRange(0, 5000);
     w.trackView->setTimeRange(0, duration);
     w.show();
 

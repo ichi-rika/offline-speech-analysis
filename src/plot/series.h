@@ -9,7 +9,7 @@ class PlotAxis;
 class PlotSeries
 {
 public:
-    PlotSeries(const QColor &color);
+    PlotSeries(const QColor &color, bool scatter);
 
     void append(double x, double y);
 
@@ -17,6 +17,7 @@ public:
 
 private:
     QColor m_color;
+    bool m_scatter;
     int m_nElt;
     QVector<double> m_xs, m_ys;
 };

@@ -6,24 +6,8 @@
 
 namespace Bairstow
 {
-    void getRoots(double u, double v, double eps, std::vector<std::complex<double>> &roots)
-    {
-        double discr = u * u - 4 * v;
-        if (std::abs(discr) < eps)
-            discr = 0;
-
-        if (discr == 0) {
-            roots.push_back(-u / 2);
-        }
-        else if (discr > 0) {
-            roots.push_back((-u + std::sqrt(discr)) / 2);
-            roots.push_back((-u - std::sqrt(discr)) / 2);
-        }
-        else {
-            roots.emplace_back(-u / 2, std::sqrt(-discr) / 2);
-        }
-    }
-
+    void getRoots(double u, double v, double eps, std::vector<std::complex<double>> &roots);
+    
     template<typename Derived>
     std::vector<std::complex<double>> solve(const DenseBase<Derived> &poly, double initialMag, double initialPha,
                                             int maxTotalIter = 50, int maxIter = 200,

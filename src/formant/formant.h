@@ -2,6 +2,7 @@
 #define FORMANT_H
 
 #include "eigen.h"
+#include "main/track.h"
 #include "formant/bairstow.h"
 #include "formant/lpc.h"
 #include "formant/cauchy.h"
@@ -111,7 +112,7 @@ namespace Formant
             return fromRoots(p, r, fs); 
         }
 
-        return std::vector<frm_root>();
+        return std::vector<frm_root>(5, {.f = 0});
     }
 
     template<typename Derived>
@@ -128,14 +129,14 @@ namespace Formant
     }
 
     template<typename Derived>
-    std::vector<DblTrack> track(const DenseBase<Derived> &x, double fs, int order, double frameLength, double frameSpace, double preEmphasisFrequency)
+    std::vector<DblTrack> analyseTracks(const DenseBase<Derived> &x, double fs, int order, double frameLength, double frameSpace, double preEmphasisFrequency)
     {
         std::vector<std::vector<frm_root>> frms = analyse(x, fs, order, frameLength, frameSpace, preEmphasisFrequency);
         std::vector<DblTrack> tracks;
 
-        double t = frameLength / 1000 / 2;
-
+        int k = 0;
         for (const auto &frm : frms) {
+            double t = (frameLength / 2.0 + k * frameSpace) / 1000.0;
             int n = 0;
             for (const auto &v : frm) {
                 if (n >= tracks.size()) {
@@ -145,12 +146,23 @@ namespace Formant
                 tracks[n][t] = v.f;
                 n++;
             }
-
-            t += frameSpace / 1000;
+            k++;
         }
 
         return std::move(tracks);
     }
+
+    std::vector<DblTrack> track(const std::vector<std::vector<frm_root>> &frms,
+                                double frameLength, double frameSpace,
+                                int ntrack = 3,
+                                double refF1 = 550,
+                                double refF2 = 1650,
+                                double refF3 = 2750,
+                                double refF4 = 3850,
+                                double refF5 = 4950,
+                                double dfCost = 1.0,
+                                double bfCost = 1.0,
+                                double octaveJumpCost = 1.0);
 
 }
 

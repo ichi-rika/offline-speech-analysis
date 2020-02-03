@@ -18,9 +18,9 @@ TrackView::~TrackView()
     delete m_graph;
 }
 
-void TrackView::addTrack(const DblTrack &track, const QColor &color)
+void TrackView::addTrack(const DblTrack &track, const QColor &color, bool scatter)
 {
-    auto series = new PlotSeries(color);
+    auto series = new PlotSeries(color, scatter);
     for (const auto [x, y] : track) {
         series->append(x, y);
     }

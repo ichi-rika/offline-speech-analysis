@@ -1,8 +1,8 @@
 #include "plot/series.h"
 #include "plot/axis.h"
 
-PlotSeries::PlotSeries(const QColor &color)
-    : m_color(color), m_nElt(0)
+PlotSeries::PlotSeries(const QColor &color, bool scatter)
+    : m_color(color), m_scatter(scatter), m_nElt(0)
 {
 }
 
@@ -21,7 +21,7 @@ void PlotSeries::render(int marginLeft, int marginBottom, PlotAxis *xAxis, PlotA
 
     int x, y;
 
-    /*if (!m_scatter) {
+    if (!m_scatter) {
         QPainterPath path;
 
         x = xAxis->realToPlot(w, m_xs[0]) + marginLeft;
@@ -32,21 +32,30 @@ void PlotSeries::render(int marginLeft, int marginBottom, PlotAxis *xAxis, PlotA
         for (int i = 1; i < m_nElt; ++i) { 
             x = xAxis->realToPlot(w, m_xs[i]) + marginLeft;
             y = yAxis->realToPlot(h, m_ys[i]);
-            
-            path.lineTo(x, y);
+          
+            if (m_ys[i] <= 0) {
+                continue;
+            }
+
+            if (m_ys[i - 1] <= 0 && m_ys[i] > 0) {
+                path.moveTo(x, y);
+            }
+            else {
+                path.lineTo(x, y);
+            }
         }
 
-        painter.setPen(QPen(Qt::cyan, 2));
+        painter.setPen(QPen(m_color, 2));
         painter.drawPath(path);
     }
-    else*/ {
+    else {
         QBrush b(m_color);
         
         for (int i = 0; i < m_nElt; ++i) {
             x = xAxis->realToPlot(w, m_xs[i]) + marginLeft;
             y = yAxis->realToPlot(h, m_ys[i]);
 
-            painter.fillRect(x - 1, y - 1, 2, 2, b);
+            painter.fillRect(x, y - 1, 1, 2, b);
         }
     }
 }
