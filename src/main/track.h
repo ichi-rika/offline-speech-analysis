@@ -15,6 +15,8 @@ public:
     auto begin() const { return track.cbegin(); }
     auto end() const { return track.cend(); }
 
+    const V& approx(double t) const { return track.lower_bound(t)->second; }
+
 private:
     std::map<double, V> track;
 };

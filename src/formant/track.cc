@@ -36,10 +36,10 @@ static void putResult(int iframe, int place, int itrack, void *closure)
 {
     auto prm = (struct fparm *) closure;
 
-    if (iframe > prm->thee->size()
+    /*if (iframe > prm->thee->size()
             || itrack > prm->thee->at(iframe-1).size()
             || place > prm->me->at(iframe-1).size())
-        return;
+        return;*/
 
     prm->thee->at(iframe-1).at(itrack-1) = prm->me->at(iframe-1).at(place-1);
 }
@@ -58,10 +58,10 @@ std::vector<DblTrack> Formant::track(
         nFrmMax = std::max<int>(nFrmMax, frm.size());
     }
 
-    /*if (ntrack > nFrmMin) {
+    if (ntrack > nFrmMin) {
         std::cerr << "Formant: number of tracks (" << ntrack << ") is greater than the minimum number of formants (" << nFrmMin << ")" << std::endl;
         return {};
-    }*/
+    }
 
     int nframe = frms.size();
     std::vector<std::vector<frm_root>> outFrms(nframe);

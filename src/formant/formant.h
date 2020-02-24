@@ -26,18 +26,22 @@ namespace Formant
                 continue;
             
             double r = std::abs(v);
-            if (0.7 <= r && r < 1.0) {
+            //if (0.7 <= r && r < 1.0) {
                 double phi = std::arg(v);
                 double f = std::abs(phi) * fs / (2.0 * M_PI);
-                if (f > 70) {
+                //if (f > 70) {
                     double b = -std::log(r) * fs / M_PI;
                     roots.push_back({r, phi, f, b});
-                }
-            }
+                //}
+            //}
         }
 
         std::sort(roots.begin(), roots.end(),
                 [](const auto &a, const auto &b) { return a.f < b.f; });
+
+        return std::move(roots);
+
+        // Dead code for old formant code
 
         int nCand = roots.size();
         for (int i = 0; i < nCand; ++i) {
@@ -112,7 +116,7 @@ namespace Formant
             return fromRoots(p, r, fs); 
         }
 
-        return std::vector<frm_root>(5, {.f = 0});
+        return std::vector<frm_root>{{550}, {1750}, {2550}, {3600}, {4500}};
     }
 
     template<typename Derived>

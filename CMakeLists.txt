@@ -66,6 +66,13 @@ set(SOURCES
     src/plot/transform.cc
     src/audio/audio.h
     src/audio/decode_file.c
+    src/karma/karma.h
+    src/karma/ar.cc
+    src/karma/cepstrum.cc
+    src/karma/state.cc
+    src/karma/track.cc
+    src/karma/model.cc
+    src/karma/jacobian.cc
     src/formant/formant.h
     src/formant/track.cc
     src/formant/lpc.h

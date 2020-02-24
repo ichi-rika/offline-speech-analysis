@@ -5,11 +5,12 @@
 #include "audio/audio.h"
 #include "formant/formant.h"
 #include "formant/resample.h"
+#include "karma/karma.h"
 #include "reaper/reaper.h"
 
 int main(int argc, char **argv)
 {
-    int arglen;
+    int arglen = 0;
     for (int i = 1; i < argc; ++i) {
         arglen += strlen(argv[i]);
         if (i < argc - 1)
@@ -41,30 +42,10 @@ int main(int argc, char **argv)
     
     Reaper::track(x, fs, pitch, voicing);
 
-    ArrayXd x_res = Resample::resample(x, fs, 12000, 50);
+    ArrayXd x_karma = Resample::resample(x, fs, 7000, 10);
     
-    std::vector<std::vector<Formant::frm_root>> rawFormants = Formant::analyse(
-            x_res, 12000,
-            10,
-            25.0, 0.5,
-            500.0
-    );
-
-    std::vector<DblTrack> formantTracks = Formant::track(
-            rawFormants,
-            25.0, 0.5,
-            5,
-            550,
-            1650,
-            2750,
-            3850,
-            4950,
-            1.0,
-            0.8,
-            1.5
-    );
-
-    //std::vector<DblTrack> formantTracks = Formant::analyseTracks(x_res, 12000, 12, 25.0, 0.5, 500.0);
+    std::vector<Karma::StateFormants> formants = Karma::estimate(x_karma, voicing, 7000, 20.0, 10.0, 3, 12, 15);
+    std::vector<DblTrack> formantTracks = Karma::toTrack(formants, 3);
 
     QApplication app(argc, argv);
 
@@ -82,11 +63,11 @@ int main(int argc, char **argv)
     };
     int itrack = 0;
     for (const auto &track : formantTracks) {
-        w.trackView->addTrack(track, trackColors[itrack], true);
+        w.trackView->addTrack(track, trackColors[itrack], false);
         itrack++;
     }
 
-    w.trackView->setFrequencyRange(0, 5000);
+    w.trackView->setFrequencyRange(0, 4500);
     w.trackView->setTimeRange(0, duration);
     w.show();
 

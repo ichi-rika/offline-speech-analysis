@@ -6,6 +6,7 @@
 using Eigen::DenseBase;
 using Eigen::ArrayXd;
 using Eigen::ArrayXcd;
+using Eigen::VectorXd;
 using Eigen::MatrixXd;
 using Eigen::Map;
 
