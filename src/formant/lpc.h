@@ -75,7 +75,6 @@ namespace Lpc
     {
         int sigLen = x.size();
         int winLen = round(frameLength / 1000.0 * fs);
-        int hopSize = round(frameSpace / 1000.0 * fs);
 
         // Gaussian window
         ArrayXd win(winLen);
@@ -92,17 +91,20 @@ namespace Lpc
             y(i) -= y_a * y(i - 1);
         }
         
+        int iframe = 0;
         int start = 0;
 
         std::vector<ArrayXd> frames;
 
-        while (start + winLen < y.size()) {
+        do {
             ArrayXd lpcFrame = burg(y.segment(start, winLen) * win, order);
 
             frames.push_back(std::move(lpcFrame));
 
-            start += hopSize;
+            iframe++;
+            start = round((iframe * frameSpace * fs) / 1000.0);
         }
+        while (start + winLen < sigLen);
 
         return std::move(frames);
     }

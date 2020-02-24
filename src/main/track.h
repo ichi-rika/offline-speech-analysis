@@ -2,6 +2,7 @@
 #define TRACK_H
 
 #include <map>
+#include "main/medianfilter.h"
 
 template<typename V>
 class BaseTrack {
@@ -21,7 +22,19 @@ private:
     std::map<double, V> track;
 };
 
-class DblTrack : public BaseTrack<double> {};
+class DblTrack : public BaseTrack<double> {
+public:
+    template<int sz>
+    DblTrack smoothen() const {
+        DblTrack out;
+        MedianFilter<double, sz> filter;
+        for (const auto& [x, y] : *this) {
+            out[x] = filter.Insert(y);
+        } 
+        return std::move(out);
+    }
+};
+
 class BoolTrack : public BaseTrack<bool> {};
 
 #endif // TRACK_H

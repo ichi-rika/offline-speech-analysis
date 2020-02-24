@@ -46,6 +46,7 @@ set(SOURCES
     resources.qrc
     src/main/main.cc
     src/main/track.h
+    src/main/medianfilter.h
     src/gui/gui.h
     src/gui/winmain.cc
     src/gui/style.h
